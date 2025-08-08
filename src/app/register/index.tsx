@@ -25,7 +25,7 @@ function LeftContainer() {
             <View className="flex flex-col items-center gap-6">
                 <Ionicons name="gift-outline" size={50} color="#1DA1F2" />
                 <View className="items-center">
-                    <Text className="text-3xl font-medium">Register to connect to world of blogs</Text>
+                    <Text className="text-3xl font-medium text-center">Register to connect to world of blogs</Text>
                     <Text className="text-sm font-roboto text-gray-400">Make account easily and go to the details of the name</Text>
                 </View>
                 <InputContainer />
@@ -59,7 +59,7 @@ function RightContainer() {
     const iconSize = width < 400 ? 60 : width < 768 ? 80 : 200
     
     return (
-        <View style={{ backgroundColor: '', paddingTop: 32 }} className="hidden md:flex flex-1 px-2 justify-start items-center bg-green-50 ">
+        <View style={{ backgroundColor: '', paddingTop: 32 }} className="hidden lg:flex flex-1 px-2 justify-start items-center bg-green-50 ">
             {/* <Ionicons size={iconSize} name="qr-code-outline" color="white" /> */}
             <Image style={{}} className="md:p-12" source={require('@assets/login/login_right_icon.svg')} />
         </View>
