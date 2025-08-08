@@ -148,7 +148,7 @@ const FeedListScreen = () => {
   return (
     <View className='flex-1 w-full items-center'>
       <FlatList
-        className='w-full md:w-1/2 no-scrollbar overflow-y-auto'
+        className='w-full md:w-3/4 no-scrollbar overflow-y-auto'
         data={[...posts]}
         ItemSeparatorComponent={renderSeparator}
         keyExtractor={(item) => item.id}
