@@ -112,7 +112,7 @@ const PostItem: React.FC<{ onClick: TypeValueCallback<any>, item: any }> = ({ it
   return (
     <Pressable onPress={() => { onClick(item) }}>
       <View style={styles.postContainer}>
-        <Image source={{ uri: item.image }} style={styles.postImage} />
+        {/* <Image source={{ uri: item.image }} style={styles.postImage} /> */}
         <View>
           <View style={styles.header}>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
@@ -130,7 +130,7 @@ const PostItem: React.FC<{ onClick: TypeValueCallback<any>, item: any }> = ({ it
 const FeedListScreen = () => {
   const router = useRouter()
 
-  const onItemClick = (item) => { 
+  const onItemClick = (item) => {
     router.push(RouteConstants.DETAIL_ROUTE)
   }
 
@@ -139,6 +139,7 @@ const FeedListScreen = () => {
       style={{
         backgroundColor: 'gray',
         marginBottom: 32,
+        marginRight: 100,
         opacity: 0.15,
         height: 0.5,
       }}
@@ -146,23 +147,114 @@ const FeedListScreen = () => {
   )
 
   return (
-    <View className='flex-1 w-full items-center'>
-      <FlatList
-        className='w-full md:w-1/2 no-scrollbar overflow-y-auto'
-        data={[...posts]}
-        ItemSeparatorComponent={renderSeparator}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PostItem item={item} onClick={onItemClick} />}
-      />
+    <View
+      style={styles.mediumLayout}>
+ <View
+        className="
+          hidden sm:flex flex-col items-center w-16 px-2 py-8 bg-gray-50 border-r border-gray-200
+          md:w-56 md:items-start md:px-6
+        "
+        style={styles.leftSidebar}
+      >
+        {/* Large screen: show text, small screen: show icons */}
+        <div className="flex flex-col gap-8 w-full">
+          <span className="hidden md:block font-bold text-lg mb-8 text-gray-800">Snapdium</span>
+          <nav className="flex flex-col gap-6 w-full">
+            <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
+              {/* <FaHome className="text-xl" /> */}
+              <span className="hidden md:inline">Home</span>
+            </a>
+            <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
+              {/* <FaFire className="text-xl" /> */}
+              <span className="hidden md:inline">Trending</span>
+            </a>
+            <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
+              {/* <FaBookmark className="text-xl" /> */}
+              <span className="hidden md:inline">Bookmarks</span>
+            </a>
+            <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
+              {/* <FaUser className="text-xl" /> */}
+              <span className="hidden md:inline">Profile</span>
+            </a>
+          </nav>
+        </div>
+      </View>
+
+      <View className='w-full md:w-3/4 max-w-2xl py-8'>
+        <FlatList 
+          style={styles.listWidth}
+          data={[...posts]}
+          ItemSeparatorComponent={renderSeparator}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <PostItem item={item} onClick={onItemClick} />}
+          contentContainerStyle={{ flexGrow: 1 }}
+        />
+      </View>
+      <View className='flex-1 pt-8 px-4 md:px-0 invisible lg:visible' style={styles.rightSidebar}>
+        <Text style={styles.sidebarTitle}>Recommended Topics</Text>
+        <Text style={styles.sidebarItem}>React Native</Text>
+        <Text style={styles.sidebarItem}>Mobile</Text>
+        <Text style={styles.sidebarItem}>Design</Text>
+        <Text style={styles.sidebarItem}>Productivity</Text>
+      </View>
+
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  sidebarTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 18,
+    color: '#333',
+  },
+  sidebarItem: {
+    fontSize: 15,
+    marginBottom: 14,
+    color: '#666',
+  },
+  mediumLayout: {
+    flex: 1,
+    flexDirection: 'row',
+     'justifyContent': 'center',
+     backgroundColor: '#FAFAFA',
+    alignItems: 'stretch',
+  },
+  leftSidebar: {
+    flex: 1,
+    padding: 24,
+    borderRightWidth: 0,
+    borderRightColor: '#EEE',
+    justifyContent: 'flex-start',
+  },
+  centerFeed: {
+    flex: 1,
+    alignSelf: 'center',
+    paddingHorizontal: 24,
+    backgroundColor: '#fff',
+  },
+  rightSidebar: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#FAFAFA',
+    borderLeftWidth: 0  ,
+    borderLeftColor: '#EEE',
+    justifyContent: 'flex-start',
+  },
+  centeredContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFA726', // orange-400
+    width: '100%',
+  },
+  listWidth: {
+    flex: 1
+  },
   listContainer: {
     padding: 16,
     // backgroundColor: '#fff',
-
   },
   postContainer: {
     flexDirection: 'row',
