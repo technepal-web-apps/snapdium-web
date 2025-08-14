@@ -3,6 +3,8 @@ import { useRouter } from 'expo-router'
 import React from 'react'
 import { View, Text, FlatList, Image, StyleSheet, Pressable } from 'react-native'
 import { RouteConstants } from "infrastructure/routing/route.constants"
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { FadeOutLeft } from 'react-native-reanimated'
 
 const posts = [
   {
@@ -107,7 +109,7 @@ const posts = [
   }
 ]
 
-const PostItem: React.FC<{ onClick: TypeValueCallback<any>, item: any }> = ({ item, onClick }) => {
+const PostItems: React.FC<{ onClick: TypeValueCallback<any>, item: any }> = ({ item, onClick }) => {
 
   return (
     <Pressable onPress={() => { onClick(item) }}>
@@ -134,71 +136,104 @@ const FeedListScreen = () => {
     router.push(RouteConstants.DETAIL_ROUTE)
   }
 
+  // Separator for web
   const renderSeparator = () => (
-    <View
-      style={{
-        backgroundColor: 'gray',
-        marginBottom: 32,
-        marginRight: 100,
-        opacity: 0.15,
-        height: 0.5,
-      }}
-    />
+    <div className="w-full h-px bg-gray-300 opacity-20 my-8" />
   )
 
   return (
-    <View
-      style={styles.mediumLayout}>
- <View
-        className="
-          hidden sm:flex flex-col items-center w-16 px-2 py-8 bg-gray-50 border-r border-gray-200
-          md:w-56 md:items-start md:px-6
-        "
-        style={styles.leftSidebar}
-      >
-        {/* Large screen: show text, small screen: show icons */}
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Left Sidebar - scrollable */}
+      <aside className="
+        hidden sm:flex flex-col items-center w-16 px-2 py-8 bg-gray-50 border-r border-gray-200
+        md:w-56 md:items-start md:px-6
+        overflow-y-auto
+        h-screen
+        fixed sm:static
+        top-0 left-0
+        z-10
+      ">
         <div className="flex flex-col gap-8 w-full">
           <span className="hidden md:block font-bold text-lg mb-8 text-gray-800">Snapdium</span>
           <nav className="flex flex-col gap-6 w-full">
             <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
-              {/* <FaHome className="text-xl" /> */}
+              <Ionicons name="home" size={32} color="green" />
               <span className="hidden md:inline">Home</span>
             </a>
             <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
-              {/* <FaFire className="text-xl" /> */}
+              <Ionicons name="flame" size={32} color="green" />
               <span className="hidden md:inline">Trending</span>
             </a>
             <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
-              {/* <FaBookmark className="text-xl" /> */}
+              <Ionicons name="bookmark" size={32} color="green" />
               <span className="hidden md:inline">Bookmarks</span>
             </a>
             <a className="flex flex-col items-center md:flex-row md:items-center gap-2 text-gray-700 hover:text-orange-500 cursor-pointer">
-              {/* <FaUser className="text-xl" /> */}
+              <Ionicons name="person" size={32} color="green" />
               <span className="hidden md:inline">Profile</span>
             </a>
           </nav>
         </div>
-      </View>
+      </aside>
 
-      <View className='w-full md:w-3/4 max-w-2xl py-8'>
-        <FlatList 
-          style={styles.listWidth}
-          data={[...posts]}
-          ItemSeparatorComponent={renderSeparator}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PostItem item={item} onClick={onItemClick} />}
-          contentContainerStyle={{ flexGrow: 1 }}
-        />
-      </View>
-      <View className='flex-1 pt-8 px-4 md:px-0 invisible lg:visible' style={styles.rightSidebar}>
-        <Text style={styles.sidebarTitle}>Recommended Topics</Text>
-        <Text style={styles.sidebarItem}>React Native</Text>
-        <Text style={styles.sidebarItem}>Mobile</Text>
-        <Text style={styles.sidebarItem}>Design</Text>
-        <Text style={styles.sidebarItem}>Productivity</Text>
-      </View>
+      {/* Center Feed */}
+      <main className="flex-1 flex justify-center px-2 md:px-8 overflow-y-auto h-screen">
+        <div className="w-full md:w-3/4 max-w-2xl py-8">
+          <ul>
+            {posts.map((item, idx) => (
+              <React.Fragment key={item.id}>
+                <li>
+                  <PostItem item={item} onClick={onItemClick} />
+                </li>
+                {idx < posts.length - 1 && renderSeparator()}
+              </React.Fragment>
+            ))}
+          </ul>
+        </div>
+      </main>
 
-    </View>
+      {/* Right Sidebar - scrollable */}
+      <aside className="
+        hidden lg:flex flex-col w-56 px-6 py-8 bg-gray-50 border-l border-gray-200
+        overflow-y-auto
+        h-screen
+        fixed lg:static
+        top-0 right-0
+        z-10
+      ">
+        <span className="font-bold text-lg mb-8 text-gray-800">Recommended Topics</span>
+        <nav className="flex flex-col gap-4">
+          <a className="text-gray-700 hover:text-orange-500 cursor-pointer">React Native</a>
+          <a className="text-gray-700 hover:text-orange-500 cursor-pointer">Mobile</a>
+          <a className="text-gray-700 hover:text-orange-500 cursor-pointer">Design</a>
+          <a className="text-gray-700 hover:text-orange-500 cursor-pointer">Productivity</a>
+        </nav>
+      </aside>
+    </div>
+  )
+}
+
+// PostItem for web
+const PostItem: React.FC<{ onClick: TypeValueCallback<any>, item: any }> = ({ item, onClick }) => {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(item)}
+      className="w-full text-left hover:bg-orange-50 rounded transition"
+    >
+      <div className="flex gap-4 py-4">
+        {/* <img src={item.image} alt="" className="w-20 h-20 rounded-lg object-cover mr-4" /> */}
+        <div className="flex flex-col flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <img src={item.avatar} alt={item.author} className="w-6 h-6 rounded-full" />
+            <span className="font-semibold text-sm">{item.author}</span>
+          </div>
+          <div className="font-bold text-lg mb-1">{item.title}</div>
+          <div className="text-gray-600 text-base mb-2">{item.description}</div>
+          <div className="text-xs text-gray-400">{item.date} • {item.readTime}</div>
+        </div>
+      </div>
+    </button>
   )
 }
 
